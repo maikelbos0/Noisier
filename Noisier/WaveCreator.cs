@@ -31,7 +31,7 @@ public class WaveCreator {
         binaryWriter.Write(blockAlign);
         binaryWriter.Write(bitsPerSample);
 
-        int samples = 4 * 88200 * 4;
+        int samples = 88200 * 4;
 
         binaryWriter.Write(chunkId);
         binaryWriter.Write(samples * blockAlign);
