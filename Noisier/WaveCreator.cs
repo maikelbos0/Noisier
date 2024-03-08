@@ -40,8 +40,8 @@ public class WaveCreator {
         binaryWriter.Write(NoteDuration * Notes.Count * blockAlign); // make property with test?
 
         foreach (var note in Notes) {
-            for (int timePoint = 0; timePoint < NoteDuration; timePoint++) {
-                binaryWriter.Write((short)(amplitude * (Math.Sin(timePoint * note.Frequency / frequency * 2 * Math.PI))));
+            for (int i = 0; i < NoteDuration; i++) {
+                binaryWriter.Write((short)(amplitude * note.GetBaseAmplitude(i / (double)frequency)));
             }
         }
 

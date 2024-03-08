@@ -23,4 +23,16 @@ public class NoteTests {
 
         Assert.Equal(expectedFrequency, subject.Frequency, 2);
     }
+
+    [Theory]
+    [InlineData(0, 0)]
+    [InlineData(0.25 / 440.0, 1)]
+    [InlineData(0.5 / 440.0, 0)]
+    [InlineData(0.75 / 440.0, -1)]
+    [InlineData(1 / 440.0, 0)]
+    public void GetBaseAmplitude(double timePoint, double expectedAmplitude) {
+        var subject = new Note(Pitch.A, 4);
+
+        Assert.Equal(expectedAmplitude, subject.GetBaseAmplitude(timePoint), 2);
+    }
 }
