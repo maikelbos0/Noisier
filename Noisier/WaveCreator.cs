@@ -11,14 +11,15 @@ public class WaveCreator {
     private const ushort channels = 2;
     private const uint frequency = 44100;
     private const uint bytesPerSecond = frequency * blockAlign;
-    private const ushort blockAlign = channels * bitsPerSample / 8;
+    private const ushort blockAlign = channels * ((bitsPerSample + 7) / 8);
     private const ushort bitsPerSample = 16;
     private static byte[] chunkId = Encoding.ASCII.GetBytes("data");
     private const double amplitude = 10000;
 
     public uint BeatsPerMinute { get; set; } = 100;
-    public uint NoteDuration => 60 * frequency / BeatsPerMinute;
     public List<Note> Notes { get; set; } = new();
+    public uint NoteDuration => 60 * frequency / BeatsPerMinute;
+    public uint ChunkSize => NoteDuration * (uint)Notes.Count * blockAlign;
 
     public void Create(string filePath) {
         using var fileStream = new FileStream(filePath, FileMode.Create);
@@ -37,7 +38,7 @@ public class WaveCreator {
         binaryWriter.Write(bitsPerSample);
 
         binaryWriter.Write(chunkId);
-        binaryWriter.Write(NoteDuration * Notes.Count * blockAlign); // make property with test?
+        binaryWriter.Write(ChunkSize);
 
         foreach (var note in Notes) {
             for (int i = 0; i < NoteDuration; i++) {
@@ -45,38 +46,7 @@ public class WaveCreator {
             }
         }
 
-        //int samples = 88200 * 4;
-
-        //binaryWriter.Write(chunkId);
-        //binaryWriter.Write(samples * blockAlign);
-        //double aNatural = 220.0;
-        //double ampl = 10000;
-        //double perfect = 1.5;
-        //double concert = 1.498307077;
-        //double freq = aNatural * concert;
-
-        ////for (int i = 0; i < samples; i++) {
-        ////    double t = (double)i / (double)frequency;
-        ////    short s = (short)(ampl * (Math.Sin(t * freq * 2.0 * Math.PI)));
-        ////    binaryWriter.Write(s);
-        ////}
-
-        ////for (int i = 0; i < samples / 4; i++) {
-        ////    double t = (double)i / (double)frequency;
-        ////    short s = (short)(ampl * (Math.Sin(t * freq * 2.0 * Math.PI)));
-        ////    binaryWriter.Write(s);
-        ////}
-        ////freq = aNatural * concert;
-        ////for (int i = 0; i < samples / 4; i++) {
-        ////    double t = (double)i / (double)frequency;
-        ////    short s = (short)(ampl * (Math.Sin(t * freq * 2.0 * Math.PI)));
-        ////    binaryWriter.Write(s);
-        ////}
-        //for (int i = 0; i < samples / 2; i++) {
-        //    double t = (double)i / (double)frequency;
-        //    short s = (short)(ampl * (Math.Sin(t * freq * 2.0 * Math.PI) + Math.Sin(t * freq * perfect * 2.0 * Math.PI)));
-        //    binaryWriter.Write(s);
-        //}
+        // kept for reference - to play multiple notes, add them up
         //for (int i = 0; i < samples / 2; i++) {
         //    double t = (double)i / (double)frequency;
         //    short s = (short)(ampl * (Math.Sin(t * freq * 2.0 * Math.PI) + Math.Sin(t * freq * concert * 2.0 * Math.PI)));
@@ -100,7 +70,7 @@ public class WaveCreator {
             + sizeof(ushort) // bitsPerSample
             + sizeof(uint) // chunkId
             + sizeof(uint) // chunkSize
-            + NoteDuration * Notes.Count * blockAlign
+            + ChunkSize
         );
     }
 }
