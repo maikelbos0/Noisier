@@ -54,8 +54,7 @@ public class WaveCreator {
         //}
     }
 
-    //test?
-    private uint GetSize() {
+    public uint GetSize() {
         return (uint)(
             fileTypeId.Length
             + sizeof(uint) // Size

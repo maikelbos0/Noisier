@@ -27,4 +27,14 @@ public class WaveCreatorTests {
 
         Assert.Equal(expectedChunkSize, subject.ChunkSize);
     }
+
+    [Fact]
+    public void GetSize() {
+        var subject = new WaveCreator() {
+            BeatsPerMinute = 60,
+            Notes = Enumerable.Repeat(new Note(Pitch.C, 4), 24).ToList()
+        };
+
+        Assert.Equal((uint)4233644, subject.GetSize());
+    }
 }
