@@ -18,8 +18,8 @@ public class WaveCreator {
 
     public uint BeatsPerMinute { get; set; } = 100;
     public List<Note> Notes { get; set; } = new();
-    public uint NoteDuration => 60 * frequency / BeatsPerMinute;
-    public uint ChunkSize => NoteDuration * (uint)Notes.Count * blockAlign;
+    public uint BeatDuration => 60 * frequency / BeatsPerMinute;
+    public uint ChunkSize => (uint)(Notes.Sum(note => BeatDuration * note.Duration.Value) * blockAlign);
 
     public void Create(string filePath) {
         using var fileStream = new FileStream(filePath, FileMode.Create);
@@ -41,7 +41,7 @@ public class WaveCreator {
         binaryWriter.Write(ChunkSize);
 
         foreach (var note in Notes) {
-            for (int i = 0; i < NoteDuration; i++) {
+            for (int i = 0; i < BeatDuration * note.Duration.Value; i++) {
                 binaryWriter.Write((short)(amplitude * note.GetBaseAmplitude(i / (double)frequency)));
             }
         }

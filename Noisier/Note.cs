@@ -1,6 +1,6 @@
 ﻿namespace Noisier;
 
-public record Note(Pitch Pitch, int Octave) {
+public record Note(Pitch Pitch, int Octave, Fraction Duration) {
     private const double a4Frequency = 440;
     private const int pitchesPerOctave = 12;
 
