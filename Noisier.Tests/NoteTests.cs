@@ -1,4 +1,6 @@
-namespace Noisier.Tests; 
+using Xunit;
+
+namespace Noisier.Tests;
 
 public class NoteTests {
     [Theory]

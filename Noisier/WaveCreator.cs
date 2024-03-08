@@ -14,6 +14,11 @@ public class WaveCreator {
     private const ushort blockAlign = channels * bitsPerSample / 8;
     private const ushort bitsPerSample = 16;
     private static byte[] chunkId = Encoding.ASCII.GetBytes("data");
+    private const double amplitude = 10000;
+
+    public uint BeatsPerMinute { get; set; } = 100;
+    public uint NoteDuration => 60 * frequency / BeatsPerMinute;
+    public List<Note> Notes { get; set; } = new();
 
     public void Create(string filePath) {
         using var fileStream = new FileStream(filePath, FileMode.Create);
@@ -31,47 +36,58 @@ public class WaveCreator {
         binaryWriter.Write(blockAlign);
         binaryWriter.Write(bitsPerSample);
 
-        int samples = 88200 * 4;
-
         binaryWriter.Write(chunkId);
-        binaryWriter.Write(samples * blockAlign);
-        double aNatural = 220.0;
-        double ampl = 10000;
-        double perfect = 1.5;
-        double concert = 1.498307077;
-        double freq = aNatural * concert;
+        binaryWriter.Write(NoteDuration * Notes.Count * blockAlign); // make property with test?
 
-        //for (int i = 0; i < samples; i++) {
-        //    double t = (double)i / (double)frequency;
-        //    short s = (short)(ampl * (Math.Sin(t * freq * 2.0 * Math.PI)));
-        //    binaryWriter.Write(s);
-        //}
+        foreach (var note in Notes) {
+            for (int timePoint = 0; timePoint < NoteDuration; timePoint++) {
+                binaryWriter.Write((short)(amplitude * (Math.Sin(timePoint * note.Frequency / frequency * 2 * Math.PI))));
+            }
+        }
 
-        //for (int i = 0; i < samples / 4; i++) {
+        //int samples = 88200 * 4;
+
+        //binaryWriter.Write(chunkId);
+        //binaryWriter.Write(samples * blockAlign);
+        //double aNatural = 220.0;
+        //double ampl = 10000;
+        //double perfect = 1.5;
+        //double concert = 1.498307077;
+        //double freq = aNatural * concert;
+
+        ////for (int i = 0; i < samples; i++) {
+        ////    double t = (double)i / (double)frequency;
+        ////    short s = (short)(ampl * (Math.Sin(t * freq * 2.0 * Math.PI)));
+        ////    binaryWriter.Write(s);
+        ////}
+
+        ////for (int i = 0; i < samples / 4; i++) {
+        ////    double t = (double)i / (double)frequency;
+        ////    short s = (short)(ampl * (Math.Sin(t * freq * 2.0 * Math.PI)));
+        ////    binaryWriter.Write(s);
+        ////}
+        ////freq = aNatural * concert;
+        ////for (int i = 0; i < samples / 4; i++) {
+        ////    double t = (double)i / (double)frequency;
+        ////    short s = (short)(ampl * (Math.Sin(t * freq * 2.0 * Math.PI)));
+        ////    binaryWriter.Write(s);
+        ////}
+        //for (int i = 0; i < samples / 2; i++) {
         //    double t = (double)i / (double)frequency;
-        //    short s = (short)(ampl * (Math.Sin(t * freq * 2.0 * Math.PI)));
+        //    short s = (short)(ampl * (Math.Sin(t * freq * 2.0 * Math.PI) + Math.Sin(t * freq * perfect * 2.0 * Math.PI)));
         //    binaryWriter.Write(s);
         //}
-        //freq = aNatural * concert;
-        //for (int i = 0; i < samples / 4; i++) {
+        //for (int i = 0; i < samples / 2; i++) {
         //    double t = (double)i / (double)frequency;
-        //    short s = (short)(ampl * (Math.Sin(t * freq * 2.0 * Math.PI)));
+        //    short s = (short)(ampl * (Math.Sin(t * freq * 2.0 * Math.PI) + Math.Sin(t * freq * concert * 2.0 * Math.PI)));
         //    binaryWriter.Write(s);
         //}
-        for (int i = 0; i < samples / 2; i++) {
-            double t = (double)i / (double)frequency;
-            short s = (short)(ampl * (Math.Sin(t * freq * 2.0 * Math.PI) + Math.Sin(t * freq * perfect * 2.0 * Math.PI)));
-            binaryWriter.Write(s);
-        }
-        for (int i = 0; i < samples / 2; i++) {
-            double t = (double)i / (double)frequency;
-            short s = (short)(ampl * (Math.Sin(t * freq * 2.0 * Math.PI) + Math.Sin(t * freq * concert * 2.0 * Math.PI)));
-            binaryWriter.Write(s);
-        }
     }
 
-    private int GetSize() {
-        return fileTypeId.Length
+    //test?
+    private uint GetSize() {
+        return (uint)(
+            fileTypeId.Length
             + sizeof(uint) // Size
             + mediaTypeId.Length
             + format.Length
@@ -82,10 +98,9 @@ public class WaveCreator {
             + sizeof(uint) // bytesPerSecond
             + sizeof(ushort) // blockAlign
             + sizeof(ushort) // bitsPerSample
-            
             + sizeof(uint) // chunkId
             + sizeof(uint) // chunkSize
-            + 88200 * 4 * blockAlign
-            ;
+            + NoteDuration * Notes.Count * blockAlign
+        );
     }
 }
