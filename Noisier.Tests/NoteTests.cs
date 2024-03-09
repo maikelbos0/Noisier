@@ -19,7 +19,7 @@ public class NoteTests {
     [InlineData(Pitch.B, 4, 493.88)]
     [InlineData(Pitch.A, 5, 880.0)]
     public void Frequency(Pitch pitch, int octave, double expectedFrequency) {
-        var subject = new Note(pitch, octave, new Fraction(1, 1));
+        var subject = new Note(pitch, octave, new Fraction(1, 1), new Fraction(0, 1));
 
         Assert.Equal(expectedFrequency, subject.Frequency, 2);
     }
@@ -31,7 +31,7 @@ public class NoteTests {
     [InlineData(0.75 / 440.0, -1)]
     [InlineData(1 / 440.0, 0)]
     public void GetBaseAmplitude(double timePoint, double expectedAmplitude) {
-        var subject = new Note(Pitch.A, 4, new Fraction(1, 1));
+        var subject = new Note(Pitch.A, 4, new Fraction(1, 1), new Fraction(0, 1));
 
         Assert.Equal(expectedAmplitude, subject.GetBaseAmplitude(timePoint), 2);
     }

@@ -19,7 +19,8 @@ public class WaveCreator {
     public uint BeatsPerMinute { get; set; } = 100;
     public List<Note> Notes { get; set; } = new();
     public uint BeatDuration => 60 * frequency / BeatsPerMinute;
-    public uint ChunkSize => (uint)(Notes.Sum(note => BeatDuration * note.Duration.Value) * blockAlign);
+    public uint TotalDuration => (uint)Notes.Max(note => BeatDuration * (note.Position.Value + note.Duration.Value));
+    public uint ChunkSize => TotalDuration * blockAlign;
 
     public void Create(string filePath) {
         using var fileStream = new FileStream(filePath, FileMode.Create);
@@ -40,18 +41,23 @@ public class WaveCreator {
         binaryWriter.Write(chunkId);
         binaryWriter.Write(ChunkSize);
 
-        foreach (var note in Notes) {
-            for (int i = 0; i < BeatDuration * note.Duration.Value; i++) {
-                binaryWriter.Write((short)(amplitude * note.GetBaseAmplitude(i / (double)frequency)));
-            }
-        }
+        var notes = new Queue<Note>(Notes.OrderBy(n => n.Position.Value));
+        var activeNotes = new List<Note>();
 
-        // kept for reference - to play multiple notes, add them up
-        //for (int i = 0; i < samples / 2; i++) {
-        //    double t = (double)i / (double)frequency;
-        //    short s = (short)(ampl * (Math.Sin(t * freq * 2.0 * Math.PI) + Math.Sin(t * freq * concert * 2.0 * Math.PI)));
-        //    binaryWriter.Write(s);
-        //}
+        for (uint i = 0; i < TotalDuration; i++) {
+            while (notes.Any() && i == (uint)(notes.Peek().Position.Value * BeatDuration)) {
+                activeNotes.Add(notes.Dequeue());
+            }
+
+            foreach (var activeNote in activeNotes.ToList()) {
+                if (i == (uint)((activeNote.Position.Value + activeNote.Duration.Value) * BeatDuration)) {
+                    activeNotes.Remove(activeNote);
+                }
+            }
+
+            var baseAmplitude = activeNotes.Sum(activeNote => activeNote.GetBaseAmplitude(i / (double)frequency));
+            binaryWriter.Write((short)(amplitude * baseAmplitude));
+        }
     }
 
     public uint GetSize() {
