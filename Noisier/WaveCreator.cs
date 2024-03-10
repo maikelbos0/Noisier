@@ -14,7 +14,7 @@ public class WaveCreator {
     private const ushort blockAlign = channels * ((bitsPerSample + 7) / 8);
     private const ushort bitsPerSample = 16;
     private static byte[] chunkId = Encoding.ASCII.GetBytes("data");
-    private const double amplitude = 10000;
+    private const double amplitude = 8000;
 
     public uint BeatsPerMinute { get; set; } = 100;
     public List<Note> Notes { get; set; } = new();
@@ -55,7 +55,13 @@ public class WaveCreator {
                 }
             }
 
-            var baseAmplitude = activeNotes.Sum(activeNote => activeNote.GetBaseAmplitude(i / (double)frequency));
+            var timePoint = i / (double)frequency;
+            var baseAmplitude = activeNotes.Sum(activeNote => {
+                var fragmentPlayed = (i - activeNote.Position.Value * BeatDuration) / (activeNote.Duration.Value * BeatDuration);
+
+                return activeNote.GetBaseAmplitude(timePoint, fragmentPlayed);
+            });
+
             binaryWriter.Write((short)(amplitude * baseAmplitude));
         }
     }

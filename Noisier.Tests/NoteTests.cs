@@ -1,3 +1,4 @@
+using NSubstitute;
 using Xunit;
 
 namespace Noisier.Tests;
@@ -33,6 +34,22 @@ public class NoteTests {
     public void GetBaseAmplitude(double timePoint, double expectedAmplitude) {
         var subject = new Note(Pitch.A, 4, new Fraction(1, 1), new Fraction(0, 1));
 
-        Assert.Equal(expectedAmplitude, subject.GetBaseAmplitude(timePoint), 2);
+        Assert.Equal(expectedAmplitude, subject.GetBaseAmplitude(timePoint, 0), 2);
+    }
+
+    [Fact]
+    public void GetBaseAmplitude_Applies_Effects() {
+        var noteEffects = new List<INoteEffect>() {
+            Substitute.For<INoteEffect>(),
+            Substitute.For<INoteEffect>()
+        };
+        var subject = new Note(Pitch.A, 4, new Fraction(1, 1), new Fraction(0, 1)) {
+            Effects = noteEffects
+        };
+
+        noteEffects[0].Apply(Arg.Any<double>(), Arg.Any<double>()).Returns(callInfo => callInfo.ArgAt<double>(0) + 0.5);
+        noteEffects[1].Apply(Arg.Any<double>(), Arg.Any<double>()).Returns(callInfo => callInfo.ArgAt<double>(0) / 2);
+
+        Assert.Equal(0.75, subject.GetBaseAmplitude(0.25 / 440.0, 0.4), 2);
     }
 }
