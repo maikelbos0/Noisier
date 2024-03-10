@@ -28,12 +28,32 @@ public class WaveCreator {
 
         WriteHeader(binaryWriter);
         WriteFormat(binaryWriter);
+        WriteContent(binaryWriter);
+    }
+
+    public void WriteHeader(BinaryWriter binaryWriter) {
+        binaryWriter.Write(fileTypeId);
+        binaryWriter.Write(GetSize());
+        binaryWriter.Write(mediaTypeId);
+    }
+
+    public void WriteFormat(BinaryWriter binaryWriter) {
+        binaryWriter.Write(format);
+        binaryWriter.Write(formatChunkSize);
+        binaryWriter.Write(formatTag);
+        binaryWriter.Write(channels);
+        binaryWriter.Write(frequency);
+        binaryWriter.Write(bytesPerSecond);
+        binaryWriter.Write(blockAlign);
+        binaryWriter.Write(bitsPerSample);
+    }
+
+    public void WriteContent(BinaryWriter binaryWriter) {
+        var notes = new Queue<Note>(Notes.OrderBy(n => n.Position.Value));
+        var activeNotes = new List<Note>();
 
         binaryWriter.Write(chunkId);
         binaryWriter.Write(ChunkSize);
-
-        var notes = new Queue<Note>(Notes.OrderBy(n => n.Position.Value));
-        var activeNotes = new List<Note>();
 
         for (uint i = 0; i < TotalDuration; i++) {
             while (notes.Any() && i == (uint)(notes.Peek().Position.Value * BeatDuration)) {
@@ -55,23 +75,6 @@ public class WaveCreator {
 
             binaryWriter.Write((short)Math.Clamp(amplitude * baseAmplitude, short.MinValue, short.MaxValue));
         }
-    }
-
-    public void WriteHeader(BinaryWriter binaryWriter) {
-        binaryWriter.Write(fileTypeId);
-        binaryWriter.Write(GetSize());
-        binaryWriter.Write(mediaTypeId);
-    }
-
-    public void WriteFormat(BinaryWriter binaryWriter) {
-        binaryWriter.Write(format);
-        binaryWriter.Write(formatChunkSize);
-        binaryWriter.Write(formatTag);
-        binaryWriter.Write(channels);
-        binaryWriter.Write(frequency);
-        binaryWriter.Write(bytesPerSecond);
-        binaryWriter.Write(blockAlign);
-        binaryWriter.Write(bitsPerSample);
     }
 
     public uint GetSize() {
