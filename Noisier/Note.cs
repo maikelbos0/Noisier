@@ -1,14 +1,15 @@
 ﻿namespace Noisier;
 
-// TODO add chord effect
 // TODO add waveform switch?
-public record Note(Pitch Pitch, int Octave, Fraction Duration, Fraction Position) {
-    private const double a4Frequency = 440;
-    private const int pitchesPerOctave = 12;
+public class Note {
+    public List<Pitch> Pitches { get; set; } = [];
+    public required Fraction Duration { get; set; }
+    public required Fraction Position { get; set; }
+    public List<IEffect> Effects { get; set; } = [];
 
-    public List<IEffect> Effects { get; set; } = new();
-    public double Frequency => a4Frequency * Math.Pow(2, ((Octave - 4) * pitchesPerOctave + (int)Pitch - (int)Pitch.A) / (double)pitchesPerOctave);
+    public double GetBaseAmplitude(double timePoint, double fragmentPlayed) {
+        var baseAmplitude = Pitches.Sum(pitch => Math.Sin(timePoint * pitch.Frequency * 2 * Math.PI));
 
-    public double GetBaseAmplitude(double timePoint, double fragmentPlayed) 
-        => Effects.Aggregate(Math.Sin(timePoint * Frequency * 2 * Math.PI), (baseAmplitude, effect) => effect.Apply(baseAmplitude, fragmentPlayed));
+        return Effects.Aggregate(baseAmplitude, (baseAmplitude, effect) => effect.Apply(baseAmplitude, fragmentPlayed));
+    }
 }

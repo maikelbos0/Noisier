@@ -26,7 +26,11 @@ public class WaveCreatorTests {
         var subject = new WaveCreator() {
             BeatsPerMinute = beatsPerMinute,
             Notes = {
-                new Note(Pitch.C, 4, new Fraction(durationNumerator, durationDenominator), new Fraction(positionNumerator, positionDenominator))
+                new() {
+                    Pitches = { new(PitchClass.C, 4) },
+                    Duration = new Fraction(durationNumerator, durationDenominator),
+                    Position = new Fraction(positionNumerator, positionDenominator)
+                }
             }
         };
 
@@ -72,10 +76,26 @@ public class WaveCreatorTests {
         var subject = new WaveCreator() {
             BeatsPerMinute = 441,
             Notes = {
-                new Note(Pitch.A, 3, new Fraction(1, 40), new Fraction(0, 40)),
-                new Note(Pitch.A, 4, new Fraction(1, 40), new Fraction(2, 40)),
-                new Note(Pitch.C, 4, new Fraction(1, 40), new Fraction(0, 40)),
-                new Note(Pitch.E, 4, new Fraction(1, 40), new Fraction(0, 40))
+                new() {
+                    Pitches = { new(PitchClass.A, 3) },
+                    Duration = new Fraction(1, 40),
+                    Position = new Fraction(0, 40)
+                },
+                new() {
+                    Pitches = { new(PitchClass.A, 4) },
+                    Duration = new Fraction(1, 40),
+                    Position = new Fraction(2, 40)
+                },
+                new() {
+                    Pitches = { new(PitchClass.C, 4) },
+                    Duration = new Fraction(1, 40),
+                    Position = new Fraction(0, 40)
+                },
+                new() {
+                    Pitches = { new(PitchClass.E, 4) },
+                    Duration = new Fraction(1, 40),
+                    Position = new Fraction(0, 40)
+                }
             }
         };
 
@@ -542,7 +562,11 @@ public class WaveCreatorTests {
         var subject = new WaveCreator() {
             BeatsPerMinute = 60,
             Notes = {
-                new Note(Pitch.C, 4, new Fraction(1, 1), new Fraction(23, 1))
+                new() {
+                    Pitches = { new(PitchClass.C, 4) },
+                    Duration = new Fraction(1, 1),
+                    Position = new Fraction(23, 1)
+                }
             }
         };
 
