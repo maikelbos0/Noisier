@@ -1,5 +1,5 @@
 ﻿namespace Noisier;
 
-public interface INoteEffect {
+public interface IEffect {
     public double Apply(double baseAmplitude, double fragmentPlayed);
 }

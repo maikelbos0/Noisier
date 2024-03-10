@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 const string vlcPath = @"C:\Program Files (x86)\VideoLAN\VLC\vlc.exe";
 
-var noteEffects = new List<INoteEffect>() { new NoteLinearAmplitudeDecrease() };
+var effects = new List<IEffect>() { new LinearAmplitudeDecrease() };
 var waveCreator = new WaveCreator();
 var path = @"C:\Temp\test.wav";
 
@@ -30,7 +30,7 @@ waveCreator.Notes = [
 ];
 
 foreach (var note in waveCreator.Notes) {
-    note.Effects = noteEffects;
+    note.Effects = effects;
 }
 
 waveCreator.Create(path);
