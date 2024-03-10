@@ -1,4 +1,6 @@
-﻿using Xunit;
+﻿using NSubstitute;
+using System.Text;
+using Xunit;
 
 namespace Noisier.Tests;
 
@@ -17,7 +19,7 @@ public class WaveCreatorTests {
 
     [Theory]
     [InlineData(240, 1, 1, 0, 1, 44100)]
-    [InlineData(240, 1, 2, 0, 1, 22050)]
+    [InlineData(240, 1, 5, 0, 1, 8820)]
     [InlineData(240, 2, 1, 0, 1, 88200)]
     [InlineData(240, 1, 1, 7, 1, 352800)]
     public void ChunkSize(uint beatsPerMinute, uint durationNumerator, uint durationDenominator, uint positionNumerator, uint positionDenominator, uint expectedChunkSize) {
@@ -29,6 +31,20 @@ public class WaveCreatorTests {
         };
 
         Assert.Equal(expectedChunkSize, subject.ChunkSize);
+    }
+
+    [Fact]
+    public void WriteHeader() {
+        var binaryWriter = Substitute.For<BinaryWriter>();
+        var subject = new WaveCreator();
+
+        subject.WriteHeader(binaryWriter);
+
+        Received.InOrder(() => {
+            binaryWriter.Received().Write(Arg.Is<byte[]>(value => value.SequenceEqual(Encoding.ASCII.GetBytes("RIFF"))));
+            binaryWriter.Write((uint)44);
+            binaryWriter.Received().Write(Arg.Is<byte[]>(value => value.SequenceEqual(Encoding.ASCII.GetBytes("WAVE"))));
+        });
     }
 
     [Fact]

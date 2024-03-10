@@ -19,16 +19,14 @@ public class WaveCreator {
     public uint BeatsPerMinute { get; set; } = 100;
     public List<Note> Notes { get; set; } = new();
     public uint BeatDuration => 60 * frequency / BeatsPerMinute;
-    public uint TotalDuration => (uint)Notes.Max(note => BeatDuration * (note.Position.Value + note.Duration.Value));
+    public uint TotalDuration => (uint)Notes.Select(note => BeatDuration * (note.Position.Value + note.Duration.Value)).DefaultIfEmpty(0).Max();
     public uint ChunkSize => TotalDuration * blockAlign;
 
     public void Create(string filePath) {
         using var fileStream = new FileStream(filePath, FileMode.Create);
         using var binaryWriter = new BinaryWriter(fileStream);
 
-        binaryWriter.Write(fileTypeId);
-        binaryWriter.Write(GetSize());
-        binaryWriter.Write(mediaTypeId);
+        WriteHeader(binaryWriter);
         binaryWriter.Write(format);
         binaryWriter.Write(formatChunkSize);
         binaryWriter.Write(formatTag);
@@ -64,6 +62,12 @@ public class WaveCreator {
 
             binaryWriter.Write((short)(amplitude * baseAmplitude));
         }
+    }
+
+    public void WriteHeader(BinaryWriter binaryWriter) {
+        binaryWriter.Write(fileTypeId);
+        binaryWriter.Write(GetSize());
+        binaryWriter.Write(mediaTypeId);
     }
 
     public uint GetSize() {
