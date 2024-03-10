@@ -48,6 +48,24 @@ public class WaveCreatorTests {
     }
 
     [Fact]
+    public void WriteFormat() {
+        var binaryWriter = Substitute.For<BinaryWriter>();
+        var subject = new WaveCreator();
+
+        subject.WriteFormat(binaryWriter);
+        Received.InOrder(() => {
+            binaryWriter.Received().Write(Arg.Is<byte[]>(value => value.SequenceEqual(Encoding.ASCII.GetBytes("fmt "))));
+            binaryWriter.Write((uint)16);
+            binaryWriter.Write((ushort)1);
+            binaryWriter.Write((ushort)2);
+            binaryWriter.Write((uint)44100);
+            binaryWriter.Write((uint)176400);
+            binaryWriter.Write((ushort)4);
+            binaryWriter.Write((ushort)16);
+        });
+    }
+
+    [Fact]
     public void GetSize() {
         var subject = new WaveCreator() {
             BeatsPerMinute = 60,

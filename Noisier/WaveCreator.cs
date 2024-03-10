@@ -27,14 +27,7 @@ public class WaveCreator {
         using var binaryWriter = new BinaryWriter(fileStream);
 
         WriteHeader(binaryWriter);
-        binaryWriter.Write(format);
-        binaryWriter.Write(formatChunkSize);
-        binaryWriter.Write(formatTag);
-        binaryWriter.Write(channels);
-        binaryWriter.Write(frequency);
-        binaryWriter.Write(bytesPerSecond);
-        binaryWriter.Write(blockAlign);
-        binaryWriter.Write(bitsPerSample);
+        WriteFormat(binaryWriter);
 
         binaryWriter.Write(chunkId);
         binaryWriter.Write(ChunkSize);
@@ -68,6 +61,17 @@ public class WaveCreator {
         binaryWriter.Write(fileTypeId);
         binaryWriter.Write(GetSize());
         binaryWriter.Write(mediaTypeId);
+    }
+
+    public void WriteFormat(BinaryWriter binaryWriter) {
+        binaryWriter.Write(format);
+        binaryWriter.Write(formatChunkSize);
+        binaryWriter.Write(formatTag);
+        binaryWriter.Write(channels);
+        binaryWriter.Write(frequency);
+        binaryWriter.Write(bytesPerSecond);
+        binaryWriter.Write(blockAlign);
+        binaryWriter.Write(bitsPerSample);
     }
 
     public uint GetSize() {
