@@ -67,13 +67,13 @@ public class WaveCreator {
             }
 
             var timePoint = i / (double)frequency;
-            var baseAmplitude = activeNotes.Sum(activeNote => {
+            var amplitude = activeNotes.Sum(activeNote => {
                 var fragmentPlayed = (i - activeNote.Position.Value * BeatDuration) / (activeNote.Duration.Value * BeatDuration);
 
-                return activeNote.GetBaseAmplitude(timePoint, fragmentPlayed);
+                return activeNote.GetAmplitude(timePoint, fragmentPlayed);
             });
 
-            binaryWriter.Write((short)Math.Clamp(amplitude * baseAmplitude, short.MinValue, short.MaxValue));
+            binaryWriter.Write((short)Math.Clamp(WaveCreator.amplitude * amplitude, short.MinValue, short.MaxValue));
         }
     }
 

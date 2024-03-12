@@ -7,9 +7,12 @@ public class Note {
     public required Fraction Position { get; set; }
     public List<IEffect> Effects { get; set; } = [];
 
-    public double GetBaseAmplitude(double timePoint, double fragmentPlayed) {
-        var baseAmplitude = Pitches.Sum(pitch => Math.Sin(timePoint * pitch.Frequency * 2 * Math.PI));
+    public double GetAmplitude(double timePoint, double fragmentPlayed) {
+        var amplitude = Pitches.Sum(pitch => GetPitchAmplitude(pitch, timePoint, fragmentPlayed));
 
-        return Effects.Aggregate(baseAmplitude, (baseAmplitude, effect) => effect.Apply(baseAmplitude, fragmentPlayed));
+        return Effects.Aggregate(amplitude, (amplitude, effect) => effect.Apply(amplitude, fragmentPlayed));
     }
+
+    public virtual double GetPitchAmplitude(Pitch pitch, double timePoint, double fragmentPlayed)
+        => Math.Sin(timePoint * pitch.Frequency * 2 * Math.PI);
 }
