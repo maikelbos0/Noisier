@@ -1,6 +1,5 @@
 ﻿namespace Noisier;
 
-// TODO add waveform switch?
 public class Note {
     public List<Pitch> Pitches { get; set; } = [];
     public required Fraction Duration { get; set; }

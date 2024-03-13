@@ -25,11 +25,15 @@ public class WaveCreatorTests {
     public void ChunkSize(uint beatsPerMinute, uint durationNumerator, uint durationDenominator, uint positionNumerator, uint positionDenominator, uint expectedChunkSize) {
         var subject = new WaveCreator() {
             BeatsPerMinute = beatsPerMinute,
-            Notes = {
+            Tracks = {
                 new() {
-                    Pitches = { new(PitchClass.C, 4) },
-                    Duration = new Fraction(durationNumerator, durationDenominator),
-                    Position = new Fraction(positionNumerator, positionDenominator)
+                    Notes = {
+                        new() {
+                            Pitches = { new(PitchClass.C, 4) },
+                            Duration = new Fraction(durationNumerator, durationDenominator),
+                            Position = new Fraction(positionNumerator, positionDenominator)
+                        }
+                    }
                 }
             }
         };
@@ -75,26 +79,30 @@ public class WaveCreatorTests {
         var binaryWriter = Substitute.For<BinaryWriter>();
         var subject = new WaveCreator() {
             BeatsPerMinute = 441,
-            Notes = {
+            Tracks = {
                 new() {
-                    Pitches = { new(PitchClass.A, 3) },
-                    Duration = new Fraction(1, 40),
-                    Position = new Fraction(0, 40)
-                },
-                new() {
-                    Pitches = { new(PitchClass.A, 4) },
-                    Duration = new Fraction(1, 40),
-                    Position = new Fraction(2, 40)
-                },
-                new() {
-                    Pitches = { new(PitchClass.C, 4) },
-                    Duration = new Fraction(1, 40),
-                    Position = new Fraction(0, 40)
-                },
-                new() {
-                    Pitches = { new(PitchClass.E, 4) },
-                    Duration = new Fraction(1, 40),
-                    Position = new Fraction(0, 40)
+                    Notes = {
+                        new() {
+                            Pitches = { new(PitchClass.A, 3) },
+                            Duration = new Fraction(1, 40),
+                            Position = new Fraction(0, 40)
+                        },
+                        new() {
+                            Pitches = { new(PitchClass.A, 4) },
+                            Duration = new Fraction(1, 40),
+                            Position = new Fraction(2, 40)
+                        },
+                        new() {
+                            Pitches = { new(PitchClass.C, 4) },
+                            Duration = new Fraction(1, 40),
+                            Position = new Fraction(0, 40)
+                        },
+                        new() {
+                            Pitches = { new(PitchClass.E, 4) },
+                            Duration = new Fraction(1, 40),
+                            Position = new Fraction(0, 40)
+                        }
+                    }
                 }
             }
         };
@@ -561,11 +569,15 @@ public class WaveCreatorTests {
     public void GetSize() {
         var subject = new WaveCreator() {
             BeatsPerMinute = 60,
-            Notes = {
+            Tracks = {
                 new() {
-                    Pitches = { new(PitchClass.C, 4) },
-                    Duration = new Fraction(1, 1),
-                    Position = new Fraction(23, 1)
+                    Notes = {
+                        new() {
+                            Pitches = { new(PitchClass.C, 4) },
+                            Duration = new Fraction(1, 1),
+                            Position = new Fraction(23, 1)
+                        }
+                    }
                 }
             }
         };

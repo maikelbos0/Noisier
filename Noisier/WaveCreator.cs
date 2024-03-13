@@ -14,12 +14,13 @@ public class WaveCreator {
     private const ushort blockAlign = channels * ((bitsPerSample + 7) / 8);
     private const ushort bitsPerSample = 16;
     private static byte[] chunkId = Encoding.ASCII.GetBytes("data");
-    private const double amplitude = 10000;
+    //private const double amplitude = 10000;
 
     public uint BeatsPerMinute { get; set; } = 100;
-    public List<Note> Notes { get; set; } = new();
+    //public List<Note> Notes { get; set; } = new();
+    public List<Track> Tracks { get; set; } = new();
     public uint BeatDuration => 60 * frequency / BeatsPerMinute;
-    public uint TotalDuration => (uint)Notes.Select(note => BeatDuration * (note.Position.Value + note.Duration.Value)).DefaultIfEmpty(0).Max();
+    public uint TotalDuration => (uint)Tracks.SelectMany(track => track.Notes.Select(note => BeatDuration * (note.Position.Value + note.Duration.Value))).DefaultIfEmpty(0).Max();
     public uint ChunkSize => TotalDuration * blockAlign;
 
     public void Create(string filePath) {
@@ -49,31 +50,33 @@ public class WaveCreator {
     }
 
     public void WriteContent(BinaryWriter binaryWriter) {
-        var notes = new Queue<Note>(Notes.OrderBy(n => n.Position.Value));
-        var activeNotes = new List<Note>();
+        //var notes = new Queue<Note>(Notes.OrderBy(n => n.Position.Value));
+        //var activeNotes = new List<Note>();
 
         binaryWriter.Write(chunkId);
         binaryWriter.Write(ChunkSize);
 
         for (uint i = 0; i < TotalDuration; i++) {
-            while (notes.Any() && i == (uint)(notes.Peek().Position.Value * BeatDuration)) {
-                activeNotes.Add(notes.Dequeue());
-            }
+            //while (notes.Any() && i == (uint)(notes.Peek().Position.Value * BeatDuration)) {
+            //    activeNotes.Add(notes.Dequeue());
+            //}
 
-            foreach (var activeNote in activeNotes.ToList()) {
-                if (i == (uint)((activeNote.Position.Value + activeNote.Duration.Value) * BeatDuration)) {
-                    activeNotes.Remove(activeNote);
-                }
-            }
+            //foreach (var activeNote in activeNotes.ToList()) {
+            //    if (i == (uint)((activeNote.Position.Value + activeNote.Duration.Value) * BeatDuration)) {
+            //        activeNotes.Remove(activeNote);
+            //    }
+            //}
 
-            var timePoint = i / (double)frequency;
-            var amplitude = activeNotes.Sum(activeNote => {
-                var fragmentPlayed = (i - activeNote.Position.Value * BeatDuration) / (activeNote.Duration.Value * BeatDuration);
+            //var timePoint = i / (double)frequency;
+            //var amplitude = activeNotes.Sum(activeNote => {
+            //    var fragmentPlayed = (i - activeNote.Position.Value * BeatDuration) / (activeNote.Duration.Value * BeatDuration);
 
-                return activeNote.GetAmplitude(timePoint, fragmentPlayed);
-            });
+            //    return activeNote.GetAmplitude(timePoint, fragmentPlayed);
+            //});
 
-            binaryWriter.Write((short)Math.Clamp(WaveCreator.amplitude * amplitude, short.MinValue, short.MaxValue));
+            var amplitude = Tracks.Sum(track => track.GetAmplitude(i, frequency, BeatsPerMinute));
+
+            binaryWriter.Write((short)Math.Clamp(amplitude, short.MinValue, short.MaxValue));
         }
     }
 
