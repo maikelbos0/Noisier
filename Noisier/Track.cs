@@ -13,4 +13,3 @@ public class Track {
             .Sum(note => VolumeCalculator() * note.Pitches.Sum(pitch => WaveformCalculator(timePoint, pitch.Frequency)));
     }
 }
-
