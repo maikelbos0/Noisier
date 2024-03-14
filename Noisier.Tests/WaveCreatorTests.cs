@@ -28,11 +28,7 @@ public class WaveCreatorTests {
             Tracks = {
                 new() {
                     Notes = {
-                        new() {
-                            Pitches = { new(PitchClass.C, 4) },
-                            Duration = new Fraction(durationNumerator, durationDenominator),
-                            Position = new Fraction(positionNumerator, positionDenominator)
-                        }
+                        new(new(positionNumerator, positionDenominator), new(durationNumerator, durationDenominator), new Pitch(PitchClass.C, 4))
                     }
                 }
             }
@@ -82,26 +78,10 @@ public class WaveCreatorTests {
             Tracks = {
                 new() {
                     Notes = {
-                        new() {
-                            Pitches = { new(PitchClass.A, 3) },
-                            Duration = new Fraction(1, 40),
-                            Position = new Fraction(0, 40)
-                        },
-                        new() {
-                            Pitches = { new(PitchClass.A, 4) },
-                            Duration = new Fraction(1, 40),
-                            Position = new Fraction(2, 40)
-                        },
-                        new() {
-                            Pitches = { new(PitchClass.C, 4) },
-                            Duration = new Fraction(1, 40),
-                            Position = new Fraction(0, 40)
-                        },
-                        new() {
-                            Pitches = { new(PitchClass.E, 4) },
-                            Duration = new Fraction(1, 40),
-                            Position = new Fraction(0, 40)
-                        }
+                        new(new(0, 40), new(1, 40), new Pitch(PitchClass.A, 3)),
+                        new(new(2, 40), new(1, 40), new Pitch(PitchClass.A, 4)),
+                        new(new(0, 40), new(1, 40), new Pitch(PitchClass.C, 4)),
+                        new(new(0, 40), new(1, 40), new Pitch(PitchClass.E, 4))
                     }
                 }
             }
@@ -572,11 +552,7 @@ public class WaveCreatorTests {
             Tracks = {
                 new() {
                     Notes = {
-                        new() {
-                            Pitches = { new(PitchClass.C, 4) },
-                            Duration = new Fraction(1, 1),
-                            Position = new Fraction(23, 1)
-                        }
+                        new(new(23, 1), new(1, 1), new Pitch(PitchClass.C, 4))
                     }
                 }
             }

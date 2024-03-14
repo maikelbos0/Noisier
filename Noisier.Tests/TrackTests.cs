@@ -20,9 +20,9 @@ public class TrackTests {
             WaveformCalculator = (_, _) => 1,
             VolumeCalculator = (_, _) => 1,
             Notes = {
-                new() { Pitches = { new(PitchClass.C, 4) }, Duration = new Fraction(1, 1), Position = new Fraction(0, 1) },
-                new() { Pitches = { new(PitchClass.C, 4), new(PitchClass.E, 4) }, Duration = new Fraction(1, 1), Position = new Fraction(3, 2) },
-                new() { Pitches = { new(PitchClass.G, 4) }, Duration = new Fraction(1, 1), Position = new Fraction(2, 1) },
+                new(new(0, 1), new(1, 1), new Pitch(PitchClass.C, 4)),
+                new(new(3, 2), new(1, 1), new(PitchClass.E, 4), new(PitchClass.E, 4) ),
+                new(new(2, 1), new(1, 1), new Pitch(PitchClass.G, 4))
             }
         };
 
@@ -39,7 +39,7 @@ public class TrackTests {
             WaveformCalculator = (timePoint, frequency) => timePoint * frequency,
             VolumeCalculator = (_, _) => 1,
             Notes = {
-                new() { Pitches = { new(PitchClass.A, 4) }, Duration = new Fraction(4, 1), Position = new Fraction(0, 1) }
+                new(new(0, 1), new(4, 1), new Pitch(PitchClass.A, 4))
             }
         };
 
@@ -55,7 +55,7 @@ public class TrackTests {
             WaveformCalculator = (_, _) => 1,
             VolumeCalculator = (noteDuration, relativePosition) => noteDuration - relativePosition,
             Notes = {
-                new() { Pitches = { new(PitchClass.C, 1) }, Duration = new Fraction(4, 1), Position = new Fraction(0, 1) }
+                new(new(0, 1), new(4, 1), new Pitch(PitchClass.C, 4))
             }
         };
 

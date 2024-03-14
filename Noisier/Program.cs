@@ -10,14 +10,14 @@ waveCreator.BeatsPerMinute = 30;
 waveCreator.Tracks.Add(new() {
     VolumeCalculator = (noteDuration, relativePosition) => 10000 * (1 - relativePosition / noteDuration),
     Notes = [
-        new() { Pitches = { new(PitchClass.C, 3), new(PitchClass.E, 3), new(PitchClass.G, 3) }, Duration = new Fraction(1, 1), Position = new Fraction(0, 4) },
-        new() { Pitches = { new(PitchClass.D, 3) }, Duration = new Fraction(1, 1), Position = new Fraction(4, 4) },
-        new() { Pitches = { new(PitchClass.E, 3) }, Duration = new Fraction(1, 1), Position = new Fraction(5, 4) },
-        new() { Pitches = { new(PitchClass.F, 3) }, Duration = new Fraction(1, 1), Position = new Fraction(6, 4) },
-        new() { Pitches = { new(PitchClass.G, 3) }, Duration = new Fraction(1, 1), Position = new Fraction(7, 4) },
-        new() { Pitches = { new(PitchClass.A, 3), new(PitchClass.C, 4), new(PitchClass.E, 4) }, Duration = new Fraction(1, 1), Position = new Fraction(8, 4) },
-        new() { Pitches = { new(PitchClass.B, 3) }, Duration = new Fraction(1, 1), Position = new Fraction(12, 4) },
-        new() { Pitches = { new(PitchClass.C, 4), new(PitchClass.E, 4), new(PitchClass.G, 4) }, Duration = new Fraction(1, 1), Position = new Fraction(14, 4) },
+        new(new(0, 4), new(1, 1), new(PitchClass.C, 3), new(PitchClass.E, 3), new(PitchClass.G, 3)),
+        new(new(4, 4), new(1, 1), new Pitch(PitchClass.D, 3)),
+        new(new(5, 4), new(1, 1), new Pitch(PitchClass.E, 3)),
+        new(new(6, 4), new(1, 1), new Pitch(PitchClass.F, 3)),
+        new(new(7, 4), new(1, 1), new Pitch(PitchClass.G, 3)),
+        new(new(8, 4), new(1, 1), new(PitchClass.A, 3), new(PitchClass.C, 4), new(PitchClass.E, 4)),
+        new(new(12, 4), new(1, 1), new Pitch(PitchClass.B, 3)),
+        new(new(14, 4), new(1, 1), new(PitchClass.C, 4), new(PitchClass.E, 4), new(PitchClass.G, 4)),
     ]
 });
 
