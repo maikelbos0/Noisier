@@ -17,8 +17,8 @@ public class TrackTests {
     [InlineData(300, 0)]
     public void GetAmplitude(uint position, double expectedAmplitude) {
         var subject = new Track() {
-            WaveformCalculator = (double timePoint, double frequency) => 1,
-            VolumeCalculator = () => 1,
+            WaveformCalculator = (_, _) => 1,
+            VolumeCalculator = (_, _) => 1,
             Notes = {
                 new() { Pitches = { new(PitchClass.C, 4) }, Duration = new Fraction(1, 1), Position = new Fraction(0, 1) },
                 new() { Pitches = { new(PitchClass.C, 4), new(PitchClass.E, 4) }, Duration = new Fraction(1, 1), Position = new Fraction(3, 2) },
@@ -36,8 +36,8 @@ public class TrackTests {
     [InlineData(200, 440)]
     public void GetAmplitude_WaveformCalculator(uint position, double expectedAmplitude) {
         var subject = new Track() {
-            WaveformCalculator = (double timePoint, double frequency) => timePoint * frequency,
-            VolumeCalculator = () => 1,
+            WaveformCalculator = (timePoint, frequency) => timePoint * frequency,
+            VolumeCalculator = (_, _) => 1,
             Notes = {
                 new() { Pitches = { new(PitchClass.A, 4) }, Duration = new Fraction(4, 1), Position = new Fraction(0, 1) }
             }
@@ -46,5 +46,19 @@ public class TrackTests {
         Assert.Equal(expectedAmplitude, subject.GetAmplitude(position, 200, 100));
     }
 
-    // TODO test volume
+    [Theory]
+    [InlineData(0, 400)]
+    [InlineData(100, 300)]
+    [InlineData(399, 1)]
+    public void GetAmplitude_VolumeCalculator(uint position, double expectedAmplitude) {
+        var subject = new Track() {
+            WaveformCalculator = (_, _) => 1,
+            VolumeCalculator = (noteDuration, noteProgress) => noteDuration - noteProgress,
+            Notes = {
+                new() { Pitches = { new(PitchClass.C, 1) }, Duration = new Fraction(4, 1), Position = new Fraction(0, 1) }
+            }
+        };
+
+        Assert.Equal(expectedAmplitude, subject.GetAmplitude(position, 200, 100));
+    }
 }
