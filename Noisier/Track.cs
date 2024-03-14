@@ -1,7 +1,7 @@
 ﻿namespace Noisier;
 
 public class Track {
-    public List<Note> Notes { get; set; } = new();
+    public List<Note> Notes { get; set; } = [];
     public WaveformCalculator WaveformCalculator { get; set; } = (timePoint, frequency) => Math.Sin(timePoint * frequency * 2 * Math.PI);
     public VolumeCalculator VolumeCalculator { get; set; } = (noteDuration, relativePosition) => 10000;
 

@@ -56,7 +56,7 @@ public class WaveCreatorTests {
         var binaryWriter = Substitute.For<BinaryWriter>();
         var subject = new WaveCreator();
 
-        subject.WriteFormat(binaryWriter);
+        WaveCreator.WriteFormat(binaryWriter);
 
         Received.InOrder(() => {
             binaryWriter.Write(Arg.Is<byte[]>(value => value.SequenceEqual(Encoding.ASCII.GetBytes("fmt "))));

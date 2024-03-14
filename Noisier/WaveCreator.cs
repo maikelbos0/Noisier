@@ -3,9 +3,9 @@
 namespace Noisier;
 
 public class WaveCreator {
-    private static byte[] fileTypeId = Encoding.ASCII.GetBytes("RIFF");
-    private static byte[] mediaTypeId = Encoding.ASCII.GetBytes("WAVE");
-    private static byte[] format = Encoding.ASCII.GetBytes("fmt ");
+    private static readonly byte[] fileTypeId = Encoding.ASCII.GetBytes("RIFF");
+    private static readonly byte[] mediaTypeId = Encoding.ASCII.GetBytes("WAVE");
+    private static readonly byte[] format = Encoding.ASCII.GetBytes("fmt ");
     private const uint formatChunkSize = 16;
     private const ushort formatTag = 1;
     private const ushort channels = 2;
@@ -13,10 +13,10 @@ public class WaveCreator {
     private const uint bytesPerSecond = frequency * blockAlign;
     private const ushort blockAlign = channels * ((bitsPerSample + 7) / 8);
     private const ushort bitsPerSample = 16;
-    private static byte[] chunkId = Encoding.ASCII.GetBytes("data");
+    private static readonly byte[] chunkId = Encoding.ASCII.GetBytes("data");
 
     public uint BeatsPerMinute { get; set; } = 100;
-    public List<Track> Tracks { get; set; } = new();
+    public List<Track> Tracks { get; set; } = [];
     public uint BeatDuration => 60 * frequency / BeatsPerMinute;
     public uint TotalDuration => (uint)Tracks.SelectMany(track => track.Notes.Select(note => BeatDuration * (note.Position.Value + note.Duration.Value))).DefaultIfEmpty(0).Max();
     public uint ChunkSize => TotalDuration * blockAlign;
@@ -36,7 +36,7 @@ public class WaveCreator {
         binaryWriter.Write(mediaTypeId);
     }
 
-    public void WriteFormat(BinaryWriter binaryWriter) {
+    public static void WriteFormat(BinaryWriter binaryWriter) {
         binaryWriter.Write(format);
         binaryWriter.Write(formatChunkSize);
         binaryWriter.Write(formatTag);
