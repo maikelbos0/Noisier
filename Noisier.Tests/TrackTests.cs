@@ -26,6 +26,25 @@ public class TrackTests {
             }
         };
 
-        Assert.Equal(expectedAmplitude, subject.GetAmplitude(position, 100, 100));
+        Assert.Equal(expectedAmplitude, subject.GetAmplitude(position, 200, 100));
     }
+
+    [Theory]
+    [InlineData(10, 22)]
+    [InlineData(20, 44)]
+    [InlineData(100, 220)]
+    [InlineData(200, 440)]
+    public void GetAmplitude_WaveformCalculator(uint position, double expectedAmplitude) {
+        var subject = new Track() {
+            WaveformCalculator = (double timePoint, double frequency) => timePoint * frequency,
+            VolumeCalculator = () => 1,
+            Notes = {
+                new() { Pitches = { new(PitchClass.A, 4) }, Duration = new Fraction(4, 1), Position = new Fraction(0, 1) }
+            }
+        };
+
+        Assert.Equal(expectedAmplitude, subject.GetAmplitude(position, 200, 100));
+    }
+
+    // TODO test volume
 }
