@@ -53,7 +53,7 @@ public class TrackTests {
     public void GetAmplitude_VolumeCalculator(uint position, double expectedAmplitude) {
         var subject = new Track() {
             WaveformCalculator = (_, _) => 1,
-            VolumeCalculator = (noteDuration, noteProgress) => noteDuration - noteProgress,
+            VolumeCalculator = (noteDuration, relativePosition) => noteDuration - relativePosition,
             Notes = {
                 new() { Pitches = { new(PitchClass.C, 1) }, Duration = new Fraction(4, 1), Position = new Fraction(0, 1) }
             }
