@@ -5,8 +5,7 @@ public class Track {
     public WaveformCalculator WaveformCalculator { get; set; } = (double timePoint, double frequency) => Math.Sin(timePoint * frequency * 2 * Math.PI);
     public VolumeCalculator VolumeCalculator { get; set; } = () => 10000;
 
-    public double GetAmplitude(uint position, double frequency, uint beatsPerMinute) {
-        var beatDuration = 60 * frequency / beatsPerMinute;
+    public double GetAmplitude(uint position, double frequency, double beatDuration) {
         var timePoint = position / frequency;
         
         return Notes.Where(note => position >= note.Position.Value * beatDuration && position < (note.Position.Value + note.Duration.Value) * beatDuration)

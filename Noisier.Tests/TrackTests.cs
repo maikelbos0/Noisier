@@ -26,6 +26,6 @@ public class TrackTests {
             }
         };
 
-        Assert.Equal(expectedAmplitude, subject.GetAmplitude(position, 100, 60));
+        Assert.Equal(expectedAmplitude, subject.GetAmplitude(position, 100, 100));
     }
 }

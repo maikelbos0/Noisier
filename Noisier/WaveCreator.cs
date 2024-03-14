@@ -74,7 +74,7 @@ public class WaveCreator {
             //    return activeNote.GetAmplitude(timePoint, fragmentPlayed);
             //});
 
-            var amplitude = Tracks.Sum(track => track.GetAmplitude(i, frequency, BeatsPerMinute));
+            var amplitude = Tracks.Sum(track => track.GetAmplitude(i, frequency, BeatDuration));
 
             binaryWriter.Write((short)Math.Clamp(amplitude, short.MinValue, short.MaxValue));
         }
