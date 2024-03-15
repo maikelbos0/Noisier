@@ -2,7 +2,7 @@
 
 public class Track {
     public List<Note> Notes { get; set; } = [];
-    public WaveformCalculator WaveformCalculator { get; set; } = (timePoint, frequency) => Math.Sin(timePoint * frequency * 2 * Math.PI);
+    public WaveformCalculator WaveformCalculator { get; set; } = WaveformCalculators.Sine();
     public VolumeCalculator VolumeCalculator { get; set; } = VolumeCalculators.Constant();
 
     public double GetAmplitude(uint position, double frequency, double beatDuration) {
