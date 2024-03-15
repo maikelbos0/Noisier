@@ -14,4 +14,16 @@ public class WaveformCalculatorsTests {
     public void Sine(double timePoint, double frequency, double expectedAmplitude) {
         Assert.Equal(expectedAmplitude, WaveformCalculators.Sine()(timePoint, frequency), 2);
     }
+
+    [Theory]
+    [InlineData(0, 10, 0.87)]
+    [InlineData(0.005, 10, 0.7)]
+    [InlineData(0.02, 10, 0.65)]
+    [InlineData(0.025, 10, 0.5)]
+    [InlineData(0.05, 10, -0.87)]
+    [InlineData(0.075, 10, -0.5)]
+    [InlineData(0.1, 10, 0.87)]
+    public void Piano(double timePoint, double frequency, double expectedAmplitude) {
+        Assert.Equal(expectedAmplitude, WaveformCalculators.Piano()(timePoint, frequency), 2);
+    }
 }
