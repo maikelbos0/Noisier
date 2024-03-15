@@ -8,7 +8,7 @@ var path = @"C:\Temp\test.wav";
 
 waveCreator.BeatsPerMinute = 30;
 waveCreator.Tracks.Add(new() {
-    VolumeCalculator = (noteDuration, relativePosition) => 10000 * (1 - relativePosition / noteDuration),
+    VolumeCalculator = VolumeCalculators.LinearDecrease(),
     Notes = [
         new(new(0, 4), new(1, 1), new(PitchClass.C, 3), new(PitchClass.E, 3), new(PitchClass.G, 3)),
         new(new(4, 4), new(1, 1), new Pitch(PitchClass.D, 3)),
