@@ -21,6 +21,15 @@ waveCreator.Tracks.Add(new() {
         new(new(14, 4), new(1, 1), new(PitchClass.C, 4), new(PitchClass.E, 4), new(PitchClass.G, 4)),
     ]
 });
+waveCreator.Tracks.Add(new() {
+    WaveformCalculator = WaveformCalculators.Horn(),
+    VolumeCalculator = VolumeCalculators.Sine(),
+    Notes = [
+        new(new(0, 4), new(2, 1), new Pitch(PitchClass.C, 2)),
+        new(new(8, 4), new(1, 1), new Pitch(PitchClass.A, 2)),
+        new(new(12, 4), new(1, 1), new Pitch(PitchClass.C, 3)),
+    ]
+});
 
 waveCreator.Create(path);
 
