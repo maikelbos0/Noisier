@@ -5,4 +5,5 @@ public static class VolumeCalculators {
 
     public static VolumeCalculator Constant(uint volume = DefaultVolume) => (_, _) => volume;
     public static VolumeCalculator LinearDecrease(uint volume = DefaultVolume) => (noteDuration, relativePosition) => volume * (1 - relativePosition / noteDuration);
+    public static VolumeCalculator Sine(uint volume = DefaultVolume) => (noteDuration, relativePosition) => volume * Math.Sin(relativePosition / noteDuration * Math.PI);
 }
