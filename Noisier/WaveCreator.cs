@@ -18,7 +18,7 @@ public class WaveCreator {
     public uint BeatsPerMinute { get; set; } = 100;
     public List<Track> Tracks { get; set; } = [];
     public uint BeatDuration => 60 * frequency / BeatsPerMinute;
-    public uint TotalDuration => (uint)Tracks.SelectMany(track => track.Notes.Select(note => BeatDuration * (note.Position.Value + note.Duration.Value))).DefaultIfEmpty(0).Max();
+    public uint TotalDuration => (uint)Tracks.SelectMany(track => track.Positions.SelectMany(position => track.Notes.Select(note => BeatDuration * (position.Value + note.Position.Value + note.Duration.Value)))).DefaultIfEmpty(0).Max();
     public uint ChunkSize => TotalDuration * blockAlign;
 
     public void Create(string filePath) {

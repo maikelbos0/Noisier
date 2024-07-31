@@ -27,6 +27,7 @@ public class WaveCreatorTests {
             BeatsPerMinute = beatsPerMinute,
             Tracks = {
                 new() {
+                    Positions = [new(0, 1)],
                     Notes = {
                         new(new(positionNumerator, positionDenominator), new(durationNumerator, durationDenominator), new Pitch(PitchClass.C, 4))
                     }
@@ -77,6 +78,7 @@ public class WaveCreatorTests {
             BeatsPerMinute = 441,
             Tracks = {
                 new() {
+                    Positions = [new(0, 1)],
                     Notes = {
                         new(new(0, 40), new(1, 40), new Pitch(PitchClass.A, 3)),
                         new(new(2, 40), new(1, 40), new Pitch(PitchClass.A, 4)),
@@ -551,6 +553,7 @@ public class WaveCreatorTests {
             BeatsPerMinute = 60,
             Tracks = {
                 new() {
+                    Positions = [new(0, 1)],
                     Notes = {
                         new(new(23, 1), new(1, 1), new Pitch(PitchClass.C, 4))
                     }

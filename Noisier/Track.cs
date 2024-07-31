@@ -1,6 +1,7 @@
 ﻿namespace Noisier;
 
 public class Track {
+    public List<Fraction> Positions { get; set; } = new();
     public List<Note> Notes { get; set; } = [];
     public WaveformCalculator WaveformCalculator { get; set; } = WaveformCalculators.Sine();
     public VolumeCalculator VolumeCalculator { get; set; } = VolumeCalculators.Constant();
