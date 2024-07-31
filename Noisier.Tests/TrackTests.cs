@@ -17,6 +17,7 @@ public class TrackTests {
     [InlineData(300, 0)]
     public void GetAmplitude(uint position, double expectedAmplitude) {
         var subject = new Track() {
+            Positions = [new(0, 1)],
             WaveformCalculator = (_, _) => 1,
             VolumeCalculator = (_, _) => 1,
             Notes = {
@@ -30,12 +31,35 @@ public class TrackTests {
     }
 
     [Theory]
+    [InlineData(49, 0)]
+    [InlineData(50, 1)]
+    [InlineData(99, 1)]
+    [InlineData(100, 2)]
+    [InlineData(149, 2)]
+    [InlineData(150, 1)]
+    [InlineData(199, 1)]
+    [InlineData(200, 0)]
+    public void GetAmplitude_Positions(uint position, double expectedAmplitude) {
+        var subject = new Track() {
+            Positions = [new(1, 1), new(1, 2)],
+            WaveformCalculator = (_, _) => 1,
+            VolumeCalculator = (_, _) => 1,
+            Notes = {
+                new(new(0, 1), new(1, 1), new Pitch(PitchClass.A, 4))
+            }
+        };
+
+        Assert.Equal(expectedAmplitude, subject.GetAmplitude(position, 200, 100));
+    }
+
+    [Theory]
     [InlineData(10, 22)]
     [InlineData(20, 44)]
     [InlineData(100, 220)]
     [InlineData(200, 440)]
     public void GetAmplitude_WaveformCalculator(uint position, double expectedAmplitude) {
         var subject = new Track() {
+            Positions = [new(0, 1)],
             WaveformCalculator = (timePoint, frequency) => timePoint * frequency,
             VolumeCalculator = (_, _) => 1,
             Notes = {
@@ -52,6 +76,7 @@ public class TrackTests {
     [InlineData(399, 1)]
     public void GetAmplitude_VolumeCalculator(uint position, double expectedAmplitude) {
         var subject = new Track() {
+            Positions = [new(0, 1)],
             WaveformCalculator = (_, _) => 1,
             VolumeCalculator = (noteDuration, relativePosition) => noteDuration - relativePosition,
             Notes = {

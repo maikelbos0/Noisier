@@ -9,7 +9,9 @@ public class Track {
     public double GetAmplitude(uint position, double frequency, double beatDuration) {
         var timePoint = position / frequency;
         
-        return Notes.Where(note => position >= note.Position.Value * beatDuration && position < (note.Position.Value + note.Duration.Value) * beatDuration)
-            .Sum(note => VolumeCalculator(note.Duration.Value * beatDuration, position - note.Position.Value * beatDuration) * note.Pitches.Sum(pitch => WaveformCalculator(timePoint, pitch.Frequency)));
+        return Notes
+            .SelectMany(note => Positions.Select(position => new { Position = position.Value + note.Position.Value, Duration = note.Duration.Value, note.Pitches }))
+            .Where(note => position >= note.Position * beatDuration && position < (note.Position + note.Duration) * beatDuration)
+            .Sum(note => VolumeCalculator(note.Duration * beatDuration, position - note.Position * beatDuration) * note.Pitches.Sum(pitch => WaveformCalculator(timePoint, pitch.Frequency)));
     }
 }
