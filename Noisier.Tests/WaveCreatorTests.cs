@@ -18,18 +18,29 @@ public class WaveCreatorTests {
     }
 
     [Theory]
-    [InlineData(240, 1, 1, 0, 1, 44100)]
-    [InlineData(240, 1, 5, 0, 1, 8820)]
-    [InlineData(240, 2, 1, 0, 1, 88200)]
-    [InlineData(240, 1, 1, 7, 1, 352800)]
-    public void ChunkSize(uint beatsPerMinute, uint durationNumerator, uint durationDenominator, uint positionNumerator, uint positionDenominator, uint expectedChunkSize) {
+    [InlineData(240, 0, 1, 0, 1, 1, 1, 44100)]
+    [InlineData(240, 0, 1, 0, 1, 1, 5, 8820)]
+    [InlineData(240, 0, 1, 0, 1, 2, 1, 88200)]
+    [InlineData(240, 0, 1, 7, 1, 1, 1, 352800)]
+    [InlineData(240, 6, 1, 2, 1, 2, 1, 441000)]
+    [InlineData(240, 2, 1, 6, 1, 2, 1, 441000)]
+    public void ChunkSize(
+        uint beatsPerMinute, 
+        uint trackPositionNumerator, 
+        uint trackPositionDenominator, 
+        uint noteDurationNumerator, 
+        uint noteDurationDenominator, 
+        uint notePositionNumerator, 
+        uint notePositionDenominator, 
+        uint expectedChunkSize
+    ) {
         var subject = new WaveCreator() {
             BeatsPerMinute = beatsPerMinute,
             Tracks = {
                 new() {
-                    Positions = [new(0, 1)],
+                    Positions = [new(trackPositionNumerator, trackPositionDenominator)],
                     Notes = {
-                        new(new(positionNumerator, positionDenominator), new(durationNumerator, durationDenominator), new Pitch(PitchClass.C, 4))
+                        new(new(notePositionNumerator, notePositionDenominator), new(noteDurationNumerator, noteDurationDenominator), new Pitch(PitchClass.C, 4))
                     }
                 }
             }
