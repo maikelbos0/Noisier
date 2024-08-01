@@ -11,7 +11,7 @@ waveCreator.Tracks.Add(new() {
     Positions = [new(1, 1)],
     WaveformCalculator = WaveformCalculators.Piano(),
     VolumeCalculator = VolumeCalculators.LinearDecrease(),
-    Notes = NoteGenerator.Generate("test", Scales.CMajor).ToList()
+    Notes = NoteGenerator.Generate("test", Scales.CMinor).ToList()
 });
 
 //waveCreator.Tracks.Add(new() {

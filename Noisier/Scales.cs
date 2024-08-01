@@ -10,4 +10,14 @@ public static class Scales {
         PitchClass.A,
         PitchClass.B
     ];
+
+    public static IList<PitchClass> CMinor => [
+        PitchClass.C,
+        PitchClass.D,
+        PitchClass.EFlat,
+        PitchClass.F,
+        PitchClass.G,
+        PitchClass.AFlat,
+        PitchClass.BFlat
+    ];
 }
