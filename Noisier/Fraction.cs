@@ -7,6 +7,6 @@ public record Fraction(uint Numerator, uint Denominator) {
         var denominator = (uint)Enumerable.Range(1, (int)(a.Denominator * b.Denominator))
             .First(candidate => candidate % a.Denominator == 0 && candidate % b.Denominator == 0);
 
-        return new((a.Numerator * a.Denominator + b.Numerator * b.Denominator) * denominator / a.Denominator / b.Denominator, denominator);
+        return new(a.Numerator * denominator / b.Denominator + b.Numerator * denominator / a.Denominator, denominator);
     }
 };
