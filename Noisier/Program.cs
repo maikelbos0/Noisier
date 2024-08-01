@@ -8,7 +8,7 @@ var path = @"C:\Temp\test.wav";
 
 waveCreator.BeatsPerMinute = 30;
 waveCreator.Tracks.Add(new() {
-    Positions = [new(0, 1)],
+    Positions = [new(1, 1)],
     WaveformCalculator = WaveformCalculators.Piano(),
     VolumeCalculator = VolumeCalculators.LinearDecrease(),
     Notes = [
@@ -23,6 +23,7 @@ waveCreator.Tracks.Add(new() {
     ]
 });
 waveCreator.Tracks.Add(new() {
+    Positions = [new(1, 1)],
     WaveformCalculator = WaveformCalculators.Horn(),
     VolumeCalculator = VolumeCalculators.Sine(),
     Notes = [
