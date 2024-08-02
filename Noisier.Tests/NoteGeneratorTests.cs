@@ -27,4 +27,19 @@ public class NoteGeneratorTests {
 
         Assert.Equal(expectedValue, subject.GetValue(includingMinimum, excludingMaximum));
     }
+
+    [Fact]
+    public void GetValueEliminatesBias() {
+        var deriveBytes = Substitute.For<DeriveBytes>();
+        var subject = new NoteGenerator("", Scales.CMajor) {
+            DeriveBytes = deriveBytes
+        };
+
+        deriveBytes.GetBytes(Arg.Any<int>()).Returns(
+            [253, 232], // 65000
+            [253, 231] // 64999
+        );
+
+        Assert.Equal<uint>(999, subject.GetValue(0, 1000));
+    }
 }

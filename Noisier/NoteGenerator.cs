@@ -52,6 +52,11 @@ public class NoteGenerator : IDisposable {
 
         var value = GetBiasedValue();
 
+        while (value >= (1 << byteCount * 8) / range * range) {
+            value = GetBiasedValue();
+        }
+
+
         return value % range + includingMinimum;
 
         uint GetBiasedValue() => DeriveBytes.GetBytes(byteCount).Aggregate((uint)0, (value, b) => (value << 8) + b);
