@@ -41,7 +41,7 @@ public class NoteGenerator : IDisposable {
         return new Note(position, new Fraction(DeriveBytes.GetBytes(1).Single() % 4 + 1, denominator), new Pitch(pitchClass, octave));
     }
 
-    internal uint GetValue(uint includingMinimum, uint excludingMaximum) {
+    internal int GetValue(int includingMinimum, int excludingMaximum) {
         var range = excludingMaximum - includingMinimum;
         var byteCount = range switch {
             < 1 << 8 => 1,
@@ -57,7 +57,7 @@ public class NoteGenerator : IDisposable {
         }
 
 
-        return value % range + includingMinimum;
+        return (int)value % range + includingMinimum;
 
         uint GetBiasedValue() => DeriveBytes.GetBytes(byteCount).Aggregate((uint)0, (value, b) => (value << 8) + b);
     }

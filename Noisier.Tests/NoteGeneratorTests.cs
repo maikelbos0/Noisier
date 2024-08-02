@@ -10,17 +10,20 @@ public class NoteGeneratorTests {
     [InlineData(0, 100, 99, 99)]
     [InlineData(0, 100, 50, 150)]
     [InlineData(500, 600, 550, 150)]
+    [InlineData(-500, -400, -450, 150)]
 
     [InlineData(0, 500, 0, 0, 0)]
     [InlineData(0, 500, 499, 1, 243)]
     [InlineData(0, 500, 250, 43, 242)]
     [InlineData(2500, 3000, 2750, 43, 242)]
+    [InlineData(-2500, -2000, -2250, 43, 242)]
 
     [InlineData(0, 100000, 0, 0, 0, 0)]
     [InlineData(0, 100000, 99999, 1, 134, 159)]
     [InlineData(0, 100000, 50000, 0, 195, 80)]
     [InlineData(500000, 600000, 550000, 0, 195, 80)]
-    public void GetValueReturnsValueBetweenMinimumAndMaximum(uint includingMinimum, uint excludingMaximum, uint expectedValue, params int[] bytes) {
+    [InlineData(-500000, -400000, -450000, 0, 195, 80)]
+    public void GetValueReturnsValueBetweenMinimumAndMaximum(int includingMinimum, int excludingMaximum, int expectedValue, params int[] bytes) {
         var deriveBytes = Substitute.For<DeriveBytes>();
         var subject = new NoteGenerator("", Scales.CMajor) {
             DeriveBytes = deriveBytes
@@ -43,6 +46,6 @@ public class NoteGeneratorTests {
             [253, 231] // 64999
         );
 
-        Assert.Equal<uint>(999, subject.GetValue(0, 1000));
+        Assert.Equal(999, subject.GetValue(0, 1000));
     }
 }
