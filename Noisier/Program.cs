@@ -3,6 +3,7 @@ using System.Diagnostics;
 
 const string vlcPath = @"C:\Program Files (x86)\VideoLAN\VLC\vlc.exe";
 
+var noteGenerator = new NoteGenerator("Memphis", Scales.CMajor);
 var waveCreator = new WaveCreator();
 var path = @"C:\Temp\test.wav";
 
@@ -11,8 +12,10 @@ waveCreator.Tracks.Add(new() {
     Positions = [new(1, 1)],
     WaveformCalculator = WaveformCalculators.Piano(),
     VolumeCalculator = VolumeCalculators.LinearDecrease(),
-    Notes = NoteGenerator.Generate("test", Scales.CMinor).ToList()
+    Notes = noteGenerator.Generate().ToList()
 });
+
+var bla = waveCreator.Tracks[0].Notes.SelectMany(note => note.Pitches).ToList();
 
 //waveCreator.Tracks.Add(new() {
 //    Positions = [new(1, 1)],
