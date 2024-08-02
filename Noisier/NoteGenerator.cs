@@ -11,12 +11,12 @@ public class NoteGenerator : IDisposable {
 
     private static readonly byte[] salt = Enumerable.Range(0, 20).Select(i => (byte)(8 + i * 4)).ToArray();
 
-    private readonly Rfc2898DeriveBytes pbkdf2;
-    private readonly IList<PitchClass> scale;
+    public DeriveBytes DeriveBytes { get; internal set; }
+    public IList<PitchClass> Scale { get; set; }
 
     public NoteGenerator(string value, IList<PitchClass> scale) {
-        pbkdf2 = new Rfc2898DeriveBytes(value, salt, iterations, HashAlgorithmName.SHA256);
-        this.scale = scale;
+        DeriveBytes = new Rfc2898DeriveBytes(value, salt, iterations, HashAlgorithmName.SHA256);
+        Scale = scale;
     }
 
     public IEnumerable<Note> Generate() {
@@ -30,19 +30,35 @@ public class NoteGenerator : IDisposable {
     }
 
     private Note GenerateNote(Fraction position) {
-        var pitchClassIndex = (int)(pbkdf2.GetBytes(1).Single() % (scale.Count * bandwidth) - (scale.Count * bandwidth) / 2);
-        var octave = baseOctave + pitchClassIndex / scale.Count;
-        var pitchClass = scale[(pitchClassIndex + scale.Count) % scale.Count];
+        var pitchClassIndex = (int)(DeriveBytes.GetBytes(1).Single() % (Scale.Count * bandwidth) - (Scale.Count * bandwidth) / 2);
+        var octave = baseOctave + pitchClassIndex / Scale.Count;
+        var pitchClass = Scale[(pitchClassIndex + Scale.Count) % Scale.Count];
 
         if (pitchClassIndex < 0) {
             octave--;
         }
 
-        return new Note(position, new Fraction(pbkdf2.GetBytes(1).Single() % 4 + 1, denominator), new Pitch(pitchClass, octave));
+        return new Note(position, new Fraction(DeriveBytes.GetBytes(1).Single() % 4 + 1, denominator), new Pitch(pitchClass, octave));
+    }
+
+    internal uint GetValue(uint includingMinimum, uint excludingMaximum) {
+        var range = excludingMaximum - includingMinimum;
+        var byteCount = range switch {
+            < 1 << 8 => 1,
+            < 1 << 16 => 2,
+            < 1 << 24 => 3,
+            _ => 4
+        };
+
+        var value = GetBiasedValue();
+
+        return value % range + includingMinimum;
+
+        uint GetBiasedValue() => DeriveBytes.GetBytes(byteCount).Aggregate((uint)0, (value, b) => (value << 8) + b);
     }
 
     public void Dispose() {
-        pbkdf2.Dispose();
+        DeriveBytes.Dispose();
         GC.SuppressFinalize(this);
     }
 }
