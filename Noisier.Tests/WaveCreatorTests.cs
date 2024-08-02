@@ -9,7 +9,7 @@ public class WaveCreatorTests {
     [InlineData(30, 88200)]
     [InlineData(60, 44100)]
     [InlineData(120, 22050)]
-    public void NoteDuration(uint beatsPerMinute, double expectedDuration) {
+    public void NoteDuration(int beatsPerMinute, double expectedDuration) {
         var subject = new WaveCreator() {
             BeatsPerMinute = beatsPerMinute
         };
@@ -25,14 +25,14 @@ public class WaveCreatorTests {
     [InlineData(240, 6, 1, 2, 1, 2, 1, 441000)]
     [InlineData(240, 2, 1, 6, 1, 2, 1, 441000)]
     public void ChunkSize(
-        uint beatsPerMinute, 
-        uint trackPositionNumerator, 
-        uint trackPositionDenominator, 
-        uint noteDurationNumerator, 
-        uint noteDurationDenominator, 
-        uint notePositionNumerator, 
-        uint notePositionDenominator, 
-        uint expectedChunkSize
+        int beatsPerMinute, 
+        int trackPositionNumerator, 
+        int trackPositionDenominator, 
+        int noteDurationNumerator, 
+        int noteDurationDenominator, 
+        int notePositionNumerator, 
+        int notePositionDenominator, 
+        int expectedChunkSize
     ) {
         var subject = new WaveCreator() {
             BeatsPerMinute = beatsPerMinute,
@@ -58,7 +58,7 @@ public class WaveCreatorTests {
 
         Received.InOrder(() => {
             binaryWriter.Write(Arg.Is<byte[]>(value => value.SequenceEqual(Encoding.ASCII.GetBytes("RIFF"))));
-            binaryWriter.Write((uint)44);
+            binaryWriter.Write(44);
             binaryWriter.Write(Arg.Is<byte[]>(value => value.SequenceEqual(Encoding.ASCII.GetBytes("WAVE"))));
         });
     }
@@ -72,13 +72,13 @@ public class WaveCreatorTests {
 
         Received.InOrder(() => {
             binaryWriter.Write(Arg.Is<byte[]>(value => value.SequenceEqual(Encoding.ASCII.GetBytes("fmt "))));
-            binaryWriter.Write((uint)16);
-            binaryWriter.Write((ushort)1);
-            binaryWriter.Write((ushort)2);
-            binaryWriter.Write((uint)44100);
-            binaryWriter.Write((uint)176400);
-            binaryWriter.Write((ushort)4);
-            binaryWriter.Write((ushort)16);
+            binaryWriter.Write(16);
+            binaryWriter.Write((short)1);
+            binaryWriter.Write((short)2);
+            binaryWriter.Write(44100);
+            binaryWriter.Write(176400);
+            binaryWriter.Write((short)4);
+            binaryWriter.Write((short)16);
         });
     }
 
@@ -104,7 +104,7 @@ public class WaveCreatorTests {
 
         Received.InOrder(() => {
             binaryWriter.Write(Arg.Is<byte[]>(value => value.SequenceEqual(Encoding.ASCII.GetBytes("data"))));
-            binaryWriter.Write((uint)1800);
+            binaryWriter.Write((int)1800);
             binaryWriter.Write((short)0);
             binaryWriter.Write((short)1155);
             binaryWriter.Write((short)2309);
@@ -572,6 +572,6 @@ public class WaveCreatorTests {
             }
         };
 
-        Assert.Equal((uint)4233644, subject.GetSize());
+        Assert.Equal(4233644, subject.GetSize());
     }
 }

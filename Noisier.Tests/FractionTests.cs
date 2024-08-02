@@ -8,7 +8,7 @@ public class FractionTests {
     [InlineData(1, 2, 0.5)]
     [InlineData(2, 1, 2)]
     [InlineData(2, 3, 0.67)]
-    public void Value(uint numerator, uint denominator, double expectedValue) {
+    public void Value(int numerator, int denominator, double expectedValue) {
         var subject = new Fraction(numerator, denominator);
 
         Assert.Equal(expectedValue, subject.Value, 2);
@@ -22,7 +22,7 @@ public class FractionTests {
     [InlineData(1, 4, 1, 4, 2, 4)]
     [InlineData(1, 4, 1, 3, 7, 12)]
     [InlineData(1, 3, 1, 4, 7, 12)]
-    public void Plus(uint numeratorA, uint denominatorA, uint numeratorB, uint denominatorB, uint expectedNumerator, uint expectedDenominator) {
+    public void Plus(int numeratorA, int denominatorA, int numeratorB, int denominatorB, int expectedNumerator, int expectedDenominator) {
         var subjectA = new Fraction(numeratorA, denominatorA);
         var subjectB = new Fraction(numeratorB, denominatorB);
 

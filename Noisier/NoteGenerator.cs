@@ -5,9 +5,9 @@ namespace Noisier;
 public class NoteGenerator : IDisposable {
     private const int iterations = 1000;
     private const int baseOctave = 4;
-    private const uint duration = 8;
-    private const uint denominator = 4;
-    private const uint bandwidth = 2;
+    private const int duration = 8;
+    private const int denominator = 4;
+    private const int bandwidth = 2;
 
     private static readonly byte[] salt = Enumerable.Range(0, 20).Select(i => (byte)(8 + i * 4)).ToArray();
 
@@ -15,7 +15,7 @@ public class NoteGenerator : IDisposable {
     private readonly IList<PitchClass> scale;
 
     public NoteGenerator(string value, IList<PitchClass> scale) {
-        this.pbkdf2 = new Rfc2898DeriveBytes(value, salt, iterations, HashAlgorithmName.SHA256);
+        pbkdf2 = new Rfc2898DeriveBytes(value, salt, iterations, HashAlgorithmName.SHA256);
         this.scale = scale;
     }
 
@@ -38,7 +38,7 @@ public class NoteGenerator : IDisposable {
             octave--;
         }
 
-        return new Note(position, new Fraction((uint)pbkdf2.GetBytes(1).Single() % 4 + 1, denominator), new Pitch(pitchClass, octave));
+        return new Note(position, new Fraction(pbkdf2.GetBytes(1).Single() % 4 + 1, denominator), new Pitch(pitchClass, octave));
     }
 
     public void Dispose() {

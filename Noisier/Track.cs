@@ -6,7 +6,7 @@ public class Track {
     public WaveformCalculator WaveformCalculator { get; set; } = WaveformCalculators.Sine();
     public VolumeCalculator VolumeCalculator { get; set; } = VolumeCalculators.Constant();
 
-    public double GetAmplitude(uint position, double frequency, double beatDuration) {
+    public double GetAmplitude(int position, double frequency, double beatDuration) {
         var timePoint = position / frequency;
         
         return Notes
