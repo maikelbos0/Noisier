@@ -7,7 +7,7 @@ public class NoteGenerator : IDisposable {
     private const int baseOctave = 4;
     private const int duration = 8;
     private const int denominator = 4;
-    private const int bandwidth = 2;
+    private const int bandwidth = 7;
 
     private static readonly byte[] salt = Enumerable.Range(0, 20).Select(i => (byte)(8 + i * 4)).ToArray();
 
@@ -19,6 +19,9 @@ public class NoteGenerator : IDisposable {
         Scale = scale;
     }
 
+    // TODO adjust bandwidth???
+    // TODO add pauses, maybe chords somehow?
+    // TODO add tests
     public IEnumerable<Note> Generate() {
         var note = GenerateNote(new Fraction(0, denominator));
 
@@ -29,8 +32,8 @@ public class NoteGenerator : IDisposable {
         }
     }
 
-    private Note GenerateNote(Fraction position) {
-        var pitchClassIndex = (int)(DeriveBytes.GetBytes(1).Single() % (Scale.Count * bandwidth) - (Scale.Count * bandwidth) / 2);
+    internal Note GenerateNote(Fraction position) {
+        var pitchClassIndex = GetValue(-bandwidth, bandwidth * 2 + 1);
         var octave = baseOctave + pitchClassIndex / Scale.Count;
         var pitchClass = Scale[(pitchClassIndex + Scale.Count) % Scale.Count];
 
@@ -38,7 +41,7 @@ public class NoteGenerator : IDisposable {
             octave--;
         }
 
-        return new Note(position, new Fraction(DeriveBytes.GetBytes(1).Single() % 4 + 1, denominator), new Pitch(pitchClass, octave));
+        return new Note(position, new Fraction(GetValue(1, 5), denominator), new Pitch(pitchClass, octave));
     }
 
     internal int GetValue(int includingMinimum, int excludingMaximum) {
